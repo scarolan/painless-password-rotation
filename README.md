@@ -12,7 +12,7 @@ NOTE: This is *not* the be-all and end-all of password rotation. It is also not 
 In this guide you'll have three terminal windows open. One for running Vault, a second for entering Vault CLI commands, and one for your remote Linux server. The scripts run from the remote GCP instance and connect to Vault to update their stored credentials.
 
 ## Prerequisites
-* HashiCorp Vault cluster that is reachable from your server instances
+* HashiCorp Vault cluster that is reachable from your server instances. (Inbound TCP port 8200 to Vault)
 * Seth Vargo's most excellent [vault-secrets-gen plugin](https://github.com/sethvargo/vault-secrets-gen)
 * Vault command line configured for your Vault cluster. (Hint: You need to set VAULT_ADDR and VAULT_TOKEN environment variables.)
 * A version 2 K/V secrets backend mounted at `systemcreds`
@@ -27,14 +27,16 @@ vault policy write rotate-windows policies/rotate-windows.hcl
 ### Step 2: Generate a token for each server
 ```
 vault token create -period 24h -policy rotate-linux
+vault token create -period 24h -policy rotate-windows
 ```
 
 ### Step 3: Put the token onto each instance
-Append the following lines to /etc/environment
+Append the following lines to /etc/environment.
 ```
 export VAULT_ADDR=https://your_vault.server.com:8200
 export VAULT_TOKEN=4ebeb7f9-d691-c53f-d8d0-3c3d500ddda8
 ```
+Windows users should set these as system environment variables.
 
 ### Step 4: Run the rotate_linux_password.sh script
 ```
@@ -45,9 +47,16 @@ export VAULT_TOKEN=4ebeb7f9-d691-c53f-d8d0-3c3d500ddda8
 
 ### Step 5: Log onto the Vault UI and verify that the password was saved successfully
 
+
+
+
+
+
+## Attempt to read creds from a system.  (this won't work from a client machine)
+curl -sS --fail -X GET -H  "X-Vault-Token: $VAULT_TOKEN" https://sean-vault0.hashidemos.io:8200/v1/systemcreds/data/linux/heritagebox/root_creds
+
 ### Show older versions of the credentials
 ```
 curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" ${VAULT_ADDR}/v1/systemcreds/data/linux/heritagebox/root_creds?version=5 | jq .
 curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" ${VAULT_ADDR}/v1/systemcreds/data/linux/heritagebox/root_creds?version=1 | jq .
 ```
-
