@@ -1,3 +1,7 @@
+# Script for rotating passwords on local accounts.
+# Make sure and set VAULT_TOKEN and VAULT_ADDR as environment variables.
+# You may run this script as a scheduled task for regular rotation.
+
 # Check for correct usage
 Param(
     [Parameter(Mandatory=$True,Position=1)]
@@ -8,9 +12,6 @@ Param(
 $VAULT_ADDR = $env:VAULT_ADDR
 $VAULT_TOKEN = $env:VAULT_TOKEN
 $HOSTNAME = $env:computername
-
-# Uncomment to reveal password.
-#Write-Host $NEWPASS
 
 # Renew our token before we do anything else.
 Invoke-RestMethod -Headers @{"X-Vault-Token" = ${VAULT_TOKEN}} -Method POST -Uri ${VAULT_ADDR}/v1/auth/token/renew-self
