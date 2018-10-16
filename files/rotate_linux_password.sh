@@ -25,15 +25,13 @@ NEWPASS=$(curl -sS --fail -X POST -H "X-Vault-Token: $VAULT_TOKEN" -H "Content-T
 #NEWPASS=$(curl -sS --fail -X POST -H "X-Vault-Token: $VAULT_TOKEN" -H "Content-Type: application/json" --data '{"length":"36","symbols":"0"}'  ${VAULT_ADDR}/v1/gen/password | grep -Po '"value":.*?[^\\]"' | awk -F ':' '{print $2}' | tr -d '"')
 
 # Create the JSON payload to write to Vault's K/V store. Keep the last 12 versions of this credential.
-JSON="{ \"options\": { \"max_versions\": 12 }, \"data\": { \"root\": \"$NEWPASS\" } }"
+JSON="{ \"options\": { \"max_versions\": 12 }, \"data\": { \"$USERNAME\": \"$NEWPASS\" } }"
 
 # First commit the new password to vault, then capture the exit status.
 curl -sS --fail -X POST -H "X-Vault-Token: $VAULT_TOKEN" --data "$JSON" ${VAULT_ADDR}/v1/systemcreds/data/linux/$(hostname)/${USERNAME}_creds | grep -q 'request_id'
 retval=$?
 if [[ $retval -eq 0 ]]; then
   # After we save the password to vault, update it on the instance
-  # This doesn't work on Ubuntu
-  # echo $NEWPASS | passwd root --stdin
   echo "$USERNAME:$NEWPASS" | sudo chpasswd
   retval=$?
     if [[ $retval -eq 0 ]]; then
