@@ -1,0 +1,84 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Uncial+Antiqua);
+@import url(https://fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Inconsolata:400,700,400italic);
+
+body { 
+  font-family: 'Noto Serif';
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+  margin-bottom: 0;
+  font-family: Roboto;
+}
+
+.remark-slide-content h1 { font-size: 2.4em; }
+.remark-slide-content h2 { font-size: 2.0em; }
+.remark-slide-content h3 { font-size: 1.6em; }
+
+.remark-code, .remark-inline-code { font-family: 'Inconsolata'; }
+
+.remark-container {
+  background-color: rgb(11, 4, 71);
+}
+
+.title-slide .remark-slide-number {
+    visibility: hidden;
+}
+
+.section {
+  font-family: 'Uncial Antiqua';
+  text-shadow: -1px 1px 2px rgb(56, 79, 122);
+  font-weight: normal;
+  font-size: 2.0em;
+  margin-bottom: 15px;
+  margin-top: 15px;
+	border-top: 3px dotted #e5e5e5;
+  border-bottom: 3px dotted #e5e5e5;
+	box-shadow: inset 0 -1px 0 0 #e5e5e5, inset 0 1px 0 0 #e5e5e5, 0 1px 0 0 #e5e5e5, 0 -1px 0 0 #e5e5e5;
+}
+
+.titletext {
+  font-size: 2.0em;
+  margin-bottom: 0em;
+  margin-top: 0em;
+  font-family: Roboto;
+}
+
+.contents { 
+    display: inline-block;
+    font-size: 1.6em;
+    list-style-position: outside;
+    text-align: left;
+}
+
+.review {
+    font-size: 2.0em;
+    font-family: Roboto;
+}
+
+.darkgreen {
+  color: darkgreen;
+}
+
+.smalltext {
+  font-size: 0.8em;
+}
+
+.red {
+  color: red;
+}
+
+#legend {
+  border: 0px none; 
+  height: 450px; 
+  position: absolute; 
+  width: 600px; 
+  overflow: hidden;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}

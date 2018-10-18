@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Painless Password Rotation for Linux or Windows Using HashiCorp Vault</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link REL="stylesheet" TYPE="text/css" HREF="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="link.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+name: Painless-Password-Rotation
+class: center,middle,title-slide
+count: false
+![:scale 80%](images/Vault_PrimaryLogo_FullColor.png)
+.titletext[Painless Password Rotation]
+
+For Linux and Windows Local System Accounts
+
+???
+My name is Sean Carolan and I'm a Solutions Engineer with HashiCorp. I like building things. In my past life I was a Linux system administrator, now I travel and help users get started with Infrastructure as Code.
+
+---
+name: Legacy-Stuff
+Legacy Systems
+-------------------------
+
+Legacy stuff bla bla bla
+
+???
+Ideas for slides/content
+
+* Introductory slide (Seattle Computer Museum?)
+* Why is password rotation so hard?
+* Legacy systems and the sysadmins who love them
+* Photo of floppy disk or other legacy tech
+* Why don't you just sprinkle some devops on that?
+* How can we solve this password rotation problem?
+
+* Design process for password rotation system
+  - Each machine responsible for its own password rotation
+  - No external software required. Works with bash or powershell.
+  - Machines may update their own password but not read it from Vault
+  - N number of previous password versions stored in Vault
+  - Humans can be granted read access to passwords by policy
+  - Passwords should be rotated every 24 hours
+  - Generate either secure passwords or passphrases
+
+* What is a passphrase? XKCD comic with correct-battery-horse-staple
+
+
+---
+name: Live-Demo
+class: center,middle
+Live Demo
+=========================
+???
+Let's do a live demo!
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js" type="text/javascript"></script>
+    <script src="./remark_settings.js" type="text/javascript"></script>
+  </body>
+</html>
