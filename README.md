@@ -9,8 +9,6 @@ NOTE: This is *not* the be-all and end-all of password rotation. It is also not 
 * Ensure that passwords meet complexity requirements
 * Require users to check credentials out of Vault
 
-In this guide you'll have three terminal windows open. One for running Vault, a second for entering Vault CLI commands, and one for your remote Linux server. The scripts run from the remote GCP instance and connect to Vault to update their stored credentials.
-
 ## Prerequisites
 * HashiCorp Vault cluster that is reachable from your server instances. (Inbound TCP port 8200 to Vault)
 * Seth Vargo's most excellent [vault-secrets-gen plugin](https://github.com/sethvargo/vault-secrets-gen)
