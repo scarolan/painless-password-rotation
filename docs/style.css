@@ -53,6 +53,14 @@ h1, h2, h3, h4, h5, h6 {
     text-align: left;
 }
 
+.biglist { 
+  display: inline-block;
+  font-size: 1.3em;
+  list-style-position: outside;
+  text-align: left;
+  line-height: 1.8em;
+}
+
 .review {
     font-size: 2.0em;
     font-family: Roboto;

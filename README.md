@@ -38,11 +38,13 @@ export VAULT_TOKEN=4ebeb7f9-d691-c53f-d8d0-3c3d500ddda8
 ```
 Windows users should set these as system environment variables.
 
-### Step 4: Run the rotate_linux_password.sh script
-```
-export VAULT_ADDR=https://your_vault.server.com:8200
-export VAULT_TOKEN=4ebeb7f9-d691-c53f-d8d0-3c3d500ddda8
+### Step 4: Run the script
+```bash
 ./rotate-linux-password.sh root
+```
+
+```powershell
+.\rotate-windows-password.sh Administrator
 ```
 
 ### Step 5: Log onto the Vault UI and verify that the password was saved successfully

@@ -17,36 +17,613 @@ count: false
 
 For Linux and Windows Local System Accounts
 
+---
+name: Retro
+class: center,middle
+
+.center[
+![:scale 80%](images/c64.jpg)
+<br><sub>Sean at the Seattle Computer Museum</sub>
+]
+
 ???
-My name is Sean Carolan and I'm a Solutions Engineer with HashiCorp. I like building things. In my past life I was a Linux system administrator, now I travel and help users get started with Infrastructure as Code.
+My name is Sean Carolan and I'm a Solutions Engineer with HashiCorp. I like building things. In my past life I was a Linux system administrator, now I travel and help users get started with Infrastructure as Code. My first computer was a Commodore 64. (MORE HERE)
+
+Password Rotation!  Woooo!  Who's with me?  No...nobody?  Why isn't anyone excited?  
+
+Let's be honest, nobody came to this talk because they like changing passwords. I'll give you an example...(Advance to Next slide)
 
 ---
-name: Legacy-Stuff
-Legacy Systems
--------------------------
-
-Legacy stuff bla bla bla
+name: Change-Your-Password-14
+class: center,middle
+![:scale 100%](images/14days.png)
 
 ???
-Ideas for slides/content
+Does anyone else do this? Oh I've got two whole weeks. I don't want to change my password, I can still get two weeks more use out of it. After all, it took me three weeks just to memorize the darn thing.
 
-* Introductory slide (Seattle Computer Museum?)
-* Why is password rotation so hard?
-* Legacy systems and the sysadmins who love them
-* Photo of floppy disk or other legacy tech
-* Why don't you just sprinkle some devops on that?
-* How can we solve this password rotation problem?
+---
+name: Change-Your-Password-7
+class: center,middle
+![:scale 100%](images/7days.png)
 
-* Design process for password rotation system
-  - Each machine responsible for its own password rotation
-  - No external software required. Works with bash or powershell.
-  - Machines may update their own password but not read it from Vault
-  - N number of previous password versions stored in Vault
-  - Humans can be granted read access to passwords by policy
-  - Passwords should be rotated every 24 hours
-  - Generate either secure passwords or passphrases
+???
+You know what I'm busy right now. Come back later.
 
-* What is a passphrase? XKCD comic with correct-battery-horse-staple
+---
+name: Change-Your-Password-3
+class: center,middle
+![:scale 100%](images/3days.png)
+
+???
+A day may come when I change this password. But today is not that day.
+
+---
+name: Change-Your-Password-2
+class: center,middle
+![:scale 100%](images/2days.png)
+
+???
+Why can't I keep the password I have? I really like my password.
+
+---
+name: Change-Your-Password-1
+class: center,middle
+![:scale 100%](images/1days.png)
+
+???
+Ok, I'll do it this afternoon.
+
+---
+name: Change-Your-Password-Expired
+class: center,middle
+![:scale 100%](images/tableflip.png)
+
+???
+Nobody likes this! And this is just one password on one machine. Why do we participate in this crazy ritual every few months? How did we get here? And most importantly, who can we blame? 
+
+I did some research and found the inventor of the modern computer password...
+
+---
+name: Inventor-of-Password
+class: center
+Inventor of the Computer Password
+-------------------------
+.center[
+![:scale 80%](images/corbato.jpg)
+<br>
+<sub>Fernando Corbató with MIT's IBM 7090</sub>
+]
+
+???
+This dashing gentleman is Fernando Corbató. He is one of the pioneers of timesharing computer systems. He lead the team that developed the first Compatible Time Sharing System for mainframe computers. He also invented the modern computer password. 
+
+You see, back in those days computers were giant hulking machines that filled entire rooms. These powerful machines were big and expensive to run. Users would write their programs on punch cards, and then submit the punch cards to operators to run. (Think about that next time you go to deploy your code...)
+
+Programs were put in a queue and run in serial, and you often had to wait days or hours for your program to run. It wasn't practical to have developers connected to the mainframe all the time, because most of the time they were writing code, not actually running it.
+
+Fernando and his team invented time sharing to solve this problem. Multiple users could now connect to the same mainframe computer, and the idle time of one user could be used by another user connected to the system. Finally multiple users could interact with the mainframe system in real time. 
+
+"The key problem was that we were setting up multiple terminals which were to be used by multiple persons but with each person having his own private set of files," he told Wired. "Putting a password on for each individual user as a lock seemed like a very straightforward solution."
+
+Thus the password was born...
+
+---
+name: Science-Gone-Wrong
+class: center
+Science Gone Wrong
+-------------------------
+.center[
+![:scale 80%](images/return-of-the-fly.jpg)
+<br>
+<sub>Return of the Fly (1959)</sub>
+]
+
+???
+Less than a year after the password was invented, the first instance of password theft occurred in 1962.
+
+You see, these machines were very expensive to run and you were sharing them with everyone else on the team. Each user was allocated only four hours per week of compute time for their projects. 
+
+One of the other researchers on the project, Dr. Allan Scherr, was frustrated with the 4 hour time limit. He knew that there was an 'offline print' function whereby you could submit a punchcard, and print out files overnight while no one was in the lab. So he submitted a job to print out the entire list of system passwords on Friday night, and picked it up first thing on Saturday morning.
+
+In order to cover his tracks he shared the password list with several other users, one of whom immediately began to troll the administrator by leaving messages on the system under his user account.
+
+And just like a sci-fi movie plot, the brilliant scientist's creation eventually came back to haunt him. "It's become kind of a nightmare," says the 87-year-old retired researcher. "I don't think anybody can possibly remember all the passwords."
+
+Fast forward the clock 50 years, which brings us to the modern day...
+
+---
+name: Evolution-of-the-Computer-Password
+Evolution of Computer Passwords
+-------------------------
+<br><br><br><br>
+.center[
+![:scale 100%](images/shadowfile.png)
+<sub>Linux /etc/shadow file</sub>
+]
+
+???
+The password was here to stay, and for a long time passwords were stored in plaintext, usually in a file called /etc/passwd. In the 1970s, Robert Morris developed a way to store passwords in a hashed form. This way the computer system didn't have to store your password in plain text, making it much harder for someone to guess your password. Later the concept of the 'salted' hash was created, whereby we add some random data to the password before hashing it. These measures made things a little bit better but there are still many ways password authentication can go wrong.
+
+But as time went by, computers got more powerful. Breaking a simple hashed password can now be done in seconds with a password cracking tool. Security experts have long recommended regular rotation of passwords. Security experts also recommended longer passwords with numbers and symbols in them. Let's go ahead and try to set our password!
+
+---
+name: Cats-Are-Evil
+class: center
+.center[
+![:scale 50%](images/get_in_the_selfie.jpg)
+<br>
+<sub>No animals were harmed in the making of this slide.</sub>
+]
+
+???
+I had hoped to score some cheap internet points by putting a cat in my presentation, but she wanted nothing to do with it. This is my demon cat Mochiko. Mochiko means 'white rice flour'. We'll use our pet's name for our password, because it's easy to remember right?
+
+---
+name: Choosing-a-Secure-Password-Too-Short
+class: center,middle
+# Mochi
+
+???
+This is easy to remember, but unfortunately also easy to crack. I ran a password cracking tool against a hashed version of this and it took less than two minutes to break.
+
+---
+name: Choosing-a-Secure-Password-Not-Complex
+class: center,middle
+# Mochiko
+
+???
+A little better but not much. Security folks say it needs letters *and* numbers.
+
+---
+name: Choosing-a-Secure-Password-Needs-Symbol
+class: center,middle
+# Mochiko1
+
+???
+Do we really think we're fooling anyone by adding a 1 to the end of this? And yet its still not secure enough. We have to add at least one non alphanumeric symbol to it.
+
+---
+name: Choosing-a-Secure-Password-Okay-Finally
+class: center,middle
+# M0ch!k01$
+
+???
+Ok, we've substituted a ! for the i, and tacked a dollar sign on the end. Nice and secure. Let's make sure we never forget this password...
+
+---
+name: Save-Your-Password
+class: center,middle
+.center[
+![:scale 100%](images/stickynote.jpg)
+]
+
+???
+Why does this happen? Because we like to torture our users with really weird complexity requirements for passwords. Humans can on average, reliably remember a group of 7 digits, six letters, and five words.  https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
+
+Believe it or not there was a time when many of us could recite a dozen phone numbers by heart.
+Can anyone remember five phone numbers? Three? Do you know any phone numbers? Some people don't even remember own phone number anymore.
+
+Yet we've told our poor users they have to remember this string of 8 or 10 digits/symbols/letters.
+
+What if instead we gave them a string of four or five words to learn?  
+
+---
+name: A-Better-Password
+class: center
+.center[
+![:scale 90%](images/password_strength.png)
+<br>
+<sub>Source: XKCD https://xkcd.com/936/</sub>
+]
+
+???
+Now you only have to remember four things. You already know how to spell these words so you no longer have to memorize each and every letter. Sadly super long passwords made of words are not supported on many systems, because they are not 'complex' enough.
+
+---
+name: The-Password-Safe
+The Password Safe
+-------------------------
+.contents[
+* A safe or 'wallet' for all your passwords
+* Stored on smartphone, laptop, or cloud
+* Uses a master password to unlock
+* Okay for personal use
+* Challenging for teams
+* Nearly impossible for automated apps
+]
+
+???
+Nowadays we have to have a 'wallet' or 'password safe' just to keep track of the many passwords we use for various accounts and services. Many people store their passwords on their browser or in an app on their smartphone. So the situation on personal devices is more or less tolerable...but how can we deal with password rotation on servers and cloud instances? What if you have 300 machines to manage, each with its own local accounts?
+
+---
+name: Dynamic-Credentials
+class: center
+Self-Destructing Credentials
+-------------------------
+![:scale 90%](images/self-destruct.gif)
+
+???
+What if you could instead hand out usernames and passwords that would automatically expire. Users and applications can simply check out new credentials when they need them, use them for a specific amount of time, and then the credentials automatically vanish when they expire?  Sounds great doesn't it?
+
+---
+name: Dynamic-Credentials-for-Cloud-and-DB
+class: center
+Dynamic Database or Cloud Credentials with HashiCorp Vault
+-------------------------
+<br><br><br><br>
+![:scale 90%](images/dynamic-secret.jpg)
+
+???
+Imagine a ski resort. You walk up to the main counter and purchase a lift pass. The lift pass is like dynamic credentials. You might have a beginner's pass that is only good for the bunny slopes. Or you might have a pass that gives you elevated privileges, and allows you to ride to the top of the mountain. All of the passes have an expiration date on them. You simply present your pass at the lift, an employee scans it (or it happens automatically via RFID), and you get access to the lift.
+
+Vault works the same way. You can request database credentials, or public cloud API keys, and get temporary access to the systems and APIs that you need to work with?
+
+Sounds great right? Yes, I can hear you thinking..."But Sean, I'm stuck with all these legacy machines that I have to manage, and we can't do all this fancy dynamic stuff."
+
+---
+name: Legacy-Systems
+Think of the Legacy Systems
+-------------------------
+<br><br><br><br><br><br>
+```bash
+$ uptime
+18:17:07 up 2555 days,  3:57,  1 user,  load average: 0.16, 0.07, 0.06
+```
+
+leg·a·cy (adjective): _denoting software or hardware that has been superseded but is difficult to replace because of its wide use._
+
+???
+Let's talk about legacy systems. Do any of you have a machine like this on your network? 
+
+Who here manages legacy systems for your organization? Please stand up. Let's give these people a hand. These folks are heroes for taking care of those ancient systems that nobody else wants to touch. Ok you can sit back down, that is your praise for the year.  Make it last. Isn't it true though? What a thankless job. Be nice to your sysadmins and ops people.
+
+What are we going to do about these legacy systems? Some of my customers have started giving them new names. A couple weeks ago an IT director introduced me to his "Classic" environment. But I think my favorite is the bank, with their "Heritage" collection of machines. Heritage systems. You can put that on your resume. Curator of Heritage Systems.
+
+If there's one thing we know about these legacy systems, it's that they are not going away any time soon. These dinosaurs have survived this long, and somebody's gotta care for them. The security team says the root and admin passwords on these boxes has to be rotated every 90 days. How are we going to tackle this challenge?
+
+---
+name: Design-Requirements-1
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+]
+
+---
+name: Design-Requirements-2
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+]
+
+---
+name: Design-Requirements-3
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+- Each machine responsible for its own password rotation.
+]
+
+---
+name: Design-Requirements-4
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+- Each machine responsible for its own password rotation.
+- Supports random secure passwords or passphrases.
+]
+
+---
+name: Design-Requirements-5
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+- Each machine responsible for its own password rotation.
+- Supports random secure passwords or passphrases.
+- All passwords are encrypted in transit and at rest.
+]
+
+---
+name: Design-Requirements-6
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+- Each machine responsible for its own password rotation.
+- Supports random secure passwords or passphrases.
+- All passwords are encrypted in transit and at rest.
+- Servers have write-only access to HashiCorp Vault.
+]
+
+---
+name: Design-Requirements-7
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+- Each machine responsible for its own password rotation.
+- Supports random secure passwords or passphrases.
+- All passwords are encrypted in transit and at rest.
+- Servers have write-only access to HashiCorp Vault.
+- N number of previous password versions stored in Vault.
+]
+
+---
+name: Design-Requirements-8
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+- Each machine responsible for its own password rotation.
+- Supports random secure passwords or passphrases.
+- All passwords are encrypted in transit and at rest.
+- Servers have write-only access to HashiCorp Vault.
+- N number of previous password versions stored in Vault.
+- Humans are granted read access to passwords by policy.
+]
+
+---
+name: Design-Requirements-9
+Design Requirements
+-------------------------
+.biglist[
+- No external software. Works with Bash or Powershell.
+- Trusted source of entropy for password generation.
+- Each machine responsible for its own password rotation.
+- Supports random secure passwords or passphrases.
+- All passwords are encrypted in transit and at rest.
+- Servers have write-only access to HashiCorp Vault.
+- N number of previous password versions stored in Vault.
+- Humans are granted read access to passwords by policy.
+- Passwords are automatically rotated every X days.
+]
+
+---
+name: Setup-Vault
+Set Up Vault
+-------------------------
+<br><br><br><br><br><br>
+.center[Instructions for setting up an HA-enabled Vault cluster are here:]
+
+.center[
+###https://learn.hashicorp.com/vault/
+]
+
+---
+name: Setup-Vault
+Install the Password Generator Plugin
+-------------------------
+<br><br><br><br><br><br>
+Password generator plugin, creates new `gen/password` and `gen/passphrase` API endpoints:
+.center[
+### https://github.com/sethvargo/vault-secrets-gen
+]
+
+???
+Next we'll configure policies for both our servers and our sysadmins. The servers will be allowed to write new passwords to Vault, while the sysadmins have read only access to the passwords.
+
+---
+name: Configure-Policies-Linux
+Configure ACL Policies for Linux
+-------------------------
+rotate-linux.hcl
+```bash
+# Allows hosts to write new passwords
+path "systemcreds/data/linux/*" {
+  capabilities = ["create", "update"]
+}
+# Allow hosts to generate new passphrases
+path "gen/passphrase" {
+  capabilities = ["update"]
+}
+# Allow hosts to generate new passwords
+path "gen/password" {
+  capabilities = ["update"]
+}
+```
+
+linuxadmin.hcl
+```bash
+# Allows admins to read passwords.
+path "systemcreds/*" {
+  capabilities = ["list"]
+}
+path "systemcreds/data/linux/*" {
+  capabilities = ["list", "read"]
+}
+```
+
+---
+name: Configure-Policies-Windows
+Configure ACL Policies for Windows
+-------------------------
+rotate-windows.hcl
+```bash
+# Allows hosts to write new passwords
+path "systemcreds/data/windows/*" {
+  capabilities = ["create", "update"]
+}
+# Allow hosts to generate new passphrases
+path "gen/passphrase" {
+  capabilities = ["update"]
+}
+# Allow hosts to generate new passwords
+path "gen/password" {
+  capabilities = ["update"]
+}
+```
+
+windowsadmin.hcl
+```bash
+# Allows admins to read passwords.
+path "systemcreds/*" {
+  capabilities = ["list"]
+}
+path "systemcreds/data/windows/*" {
+  capabilities = ["list", "read"]
+}
+```
+
+---
+name: Generate-a-Token
+Generate a Token
+-------------------------
+Create a new token for each of your Windows and Linux servers. You'll probably want to script this part if you have a large number of machines.
+
+```bash
+$ vault token create -policy=rotate-linux -period=24h
+Key                Value
+---                -----
+token              6vtW8IOVRTBkvPfUV3RNx7vB
+token_accessor     6CNHqSIG79t7mzROq6YRYPTl
+token_duration     24h
+token_renewable    true
+token_policies     [default rotate-linux]
+```
+
+???
+This is what's known as a 'periodic' token, which has no TTL or expiration date, however, the user or application must check in at least every 24 hours or Vault will invalidate the token.
+
+---
+name: Configure-the-Scripts
+Configure the Scripts
+-------------------------
+Copy the script to your server. Set up your environment variables.
+
+Windows
+.center[
+![:scale 80%](images/envvars.png)
+]
+
+Linux
+```bash
+export VAULT_ADDR=https://your.vaultserver.com:8200
+export VAULT_TOKEN=762XkidjlyxyzBwYqPGKWAAE
+```
+
+---
+name: Run-the-Script
+Run the Password Rotation Script
+-------------------------
+Bash:
+```bash
+./rotate-linux-password.sh root
+```
+
+Powershell:
+```powershell
+./rotate-windows-password.ps1 Administrator
+```
+
+---
+name: Renew-Our-Token
+Renew Our Token
+-------------------------
+Bash:
+```bash
+curl -sS --fail -X POST -H "X-Vault-Token: $VAULT_TOKEN" ${VAULT_ADDR}/v1/auth/token/renew-self | grep -q 'lease_duration'
+retval=$?
+if [[ $retval -ne 0 ]]; then
+  echo "Error renewing Vault token lease."
+fi
+```
+
+Powershell:
+```powershell
+Invoke-RestMethod -Headers @{"X-Vault-Token" = ${VAULT_TOKEN}} -Method POST -Uri ${VAULT_ADDR}/v1/auth/token/renew-self
+if(-Not $?)
+{
+   Write-Output "Error renewing Vault token lease."
+}
+```
+
+---
+name: Generate-New-Password
+Generate a New Password
+-------------------------
+Bash:
+```bash
+NEWPASS=$(curl -sS --fail -X POST -H "X-Vault-Token: $VAULT_TOKEN" -H "Content-Type: application/json" --data '{"words":"4","separator":"-"}'  ${VAULT_ADDR}/v1/gen/passphrase | jq -r '.data|.value')
+JSON="{ \"options\": { \"max_versions\": 12 }, \"data\": { \"${USERNAME}\": \"$NEWPASS\" } }"
+```
+
+Powershell:
+```powershell
+$NEWPASS = (Invoke-RestMethod -Headers @{"X-Vault-Token" = ${VAULT_TOKEN}} -Method POST -Body "{`"length`":`"36`",`"symbols`":`"0`"}" -Uri ${VAULT_ADDR}/v1/gen/password).data.value
+$SECUREPASS = ConvertTo-SecureString $NEWPASS -AsPlainText -Force
+$JSON="{ `"options`": { `"max_versions`": 12 }, `"data`": { `"$USERNAME`": `"$NEWPASS`" } }"
+```
+
+---
+name: Save-New-Password-Linux
+Save the New Password (Linux)
+-------------------------
+```bash
+# First commit the new password to vault, then capture the exit status
+curl -sS --fail -X POST -H "X-Vault-Token: $VAULT_TOKEN" --data "$JSON" ${VAULT_ADDR}/v1/systemcreds/data/linux/$(hostname)/${USERNAME}_creds | grep -q 'request_id'
+retval=$?
+if [[ $retval -eq 0 ]]; then
+  # After we save the password to vault, update it on the instance
+  echo "$USERNAME:$NEWPASS" | sudo chpasswd
+  retval=$?
+    if [[ $retval -eq 0 ]]; then
+      echo -e "${USERNAME}'s password was stored in Vault and updated locally."
+    else
+      echo "Error: ${USERNAME}'s password was stored in Vault but *not* updated locally."
+    fi
+else
+  echo "Error saving new password to Vault. Local password will remain unchanged."
+  exit 1
+fi
+```
+
+---
+name: Save-New-Password-Windows
+Save the New Password (Windows)
+-------------------------
+```powershell
+Invoke-RestMethod -Headers @{"X-Vault-Token" = ${VAULT_TOKEN}} -Method POST -Body $JSON -Uri ${VAULT_ADDR}/v1/systemcreds/data/windows/${HOSTNAME}/${USERNAME}_creds
+if($?) {
+   Write-Output "Vault updated with new password."
+   $UserAccount = Get-LocalUser -name $USERNAME
+   $UserAccount | Set-LocalUser -Password $SECUREPASS
+   if($?) {
+       Write-Output "${USERNAME}'s password was stored in Vault and updated locally."
+   }
+   else {
+       Write-Output "Error: ${USERNAME}'s password was stored in Vault but *not* updated locally."
+   }
+}
+else {
+    Write-Output "Error saving new password to Vault. Local password will remain unchanged."
+}
+```
+
+---
+name: Schedule-It
+Schedule the Script
+-------------------------
+Linux
+```
+ # m h  dom mon dow   command
+ */5 * * * * /usr/local/bin/rotate-linux-password.sh root
+```
+
+Windows
+.center[
+![:scale 100%](images/schedtask.png)
+]
 
 
 ---
@@ -56,6 +633,31 @@ Live Demo
 =========================
 ???
 Let's do a live demo!
+
+---
+name: Security-Considerations
+Security Considerations
+-------------------------
+*What if an attacker gets their hands on one of these system tokens?*
+
+* Can write arbitrary data to systemcreds/linux or systemcreds/windows
+* Cannot overwrite existing password, could roll off all previous versions
+* Possibly write so much data that the k/v storage gets filled up
+* DDOS or failure of Vault cluster could lock you out of systems
+
+*Possible ways to mitigate risk*
+* Sentinel (Enterprise Only): Configure Vault token so it can only be used during a short time window (5 minutes). Example: 03:57:30 to 04:02:30
+* Monitor Vault audit logs for any unusual activity on systemcreds/linux and systemcreds/windows endpoints
+* Use Vault in HA mode and use DR replication for emergencies. (Enterprise Only)
+
+---
+name: Download-the-Code
+Download the Code
+-------------------------
+<br><br><br><br><br>
+.center[
+#https://git.io/fxKtU
+]
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js" type="text/javascript"></script>
