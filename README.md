@@ -48,15 +48,3 @@ Windows users should set these as system environment variables.
 ```
 
 ### Step 5: Log onto the Vault UI and verify that the password was saved successfully
-
-
-## Extras
-
-### Attempt to read creds from a system.  (this won't work from a client machine)
-curl -sS --fail -X GET -H  "X-Vault-Token: $VAULT_TOKEN" https://sean-vault0.hashidemos.io:8200/v1/systemcreds/data/linux/heritagebox/root_creds
-
-### Show older versions of the credentials
-```
-curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" ${VAULT_ADDR}/v1/systemcreds/data/linux/heritagebox/root_creds?version=5 | jq .
-curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" ${VAULT_ADDR}/v1/systemcreds/data/linux/heritagebox/root_creds?version=1 | jq .
-```
