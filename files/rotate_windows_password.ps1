@@ -8,6 +8,14 @@ Param(
     [string]$USERNAME
 )
 
+# Make sure the user exists on the local system.
+if (-not (Get-LocalUser $USERNAME)) {
+    throw '$USERNAME does not exist!'
+}
+
+# Use TLS
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 # Import some environment variables.
 $VAULT_ADDR = $env:VAULT_ADDR
 $VAULT_TOKEN = $env:VAULT_TOKEN

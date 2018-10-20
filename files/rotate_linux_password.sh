@@ -4,12 +4,18 @@
 
 # Check for usage
 if [[ $# -ne 1 ]]; then
-  echo "You must include the username of the user you wish to update"
+  echo "Please provide a username.  Usage:"
   echo "$0 root"
   exit 1
 fi
 
 USERNAME=$1
+
+# Make sure the user exists on the local system.
+if ! [[ $(id $USERNAME) ]]; then
+  echo "$USERNAME does not exist!"
+  exit 1
+fi
 
 # Renew our token before we do anything else.
 curl -sS --fail -X POST -H "X-Vault-Token: $VAULT_TOKEN" ${VAULT_ADDR}/v1/auth/token/renew-self | grep -q 'lease_duration'
