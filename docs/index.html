@@ -414,6 +414,16 @@ Password generator plugin, creates new `gen/password` and `gen/passphrase` API e
 Next we'll configure policies for both our servers and our sysadmins. The servers will be allowed to write new passwords to Vault, while the sysadmins have read only access to the passwords.
 
 ---
+name: Enable-KV-Secrets-Engine
+Enable a Key/Value v2 Secrets Engine
+-------------------------
+<br><br><br><br><br>
+Version 2 of the kv secrets engine supports secret versioning.
+```bash
+vault secrets enable -version=2 -path=systemcreds/ kv
+```
+
+---
 name: Configure-Policies-Linux
 Configure ACL Policies for Linux
 -------------------------
@@ -657,6 +667,15 @@ Download the Code
 <br><br><br><br><br>
 .center[
 #https://git.io/fxKtU
+]
+
+---
+name: Thank-You
+class: middle,center
+Thank You for Attending!
+-------------------------
+.center[
+![:scale 100%](images/Vault_PrimaryLogo_FullColor.png)
 ]
 
     </textarea>
