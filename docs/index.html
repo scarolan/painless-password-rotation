@@ -27,9 +27,11 @@ class: center,middle
 ]
 
 ???
-My name is Sean Carolan and I'm a Solutions Engineer with HashiCorp. I like building things. In my past life I was a Linux system administrator, now I travel and help users get started with Infrastructure as Code. My first computer was a Commodore 64. (MORE HERE)
+My name is Sean Carolan and I'm a Solutions Engineer with HashiCorp. I like building things. In my past life I was a Linux system administrator, now I travel and help users get started with Infrastructure as Code. My first computer was a Commodore 64. 
 
-Password Rotation!  Woooo!  Who's with me?  No...nobody?  Why isn't anyone excited?  
+This photo was taken a few years ago at the Living Computer Museum. If you are ever in Seattle, you owe it to yourself to make a pilgrimage to this place. There's nothing that makes you feel old like seeing your childhood toy in a museum. Elliot and I are playing Oregon Trail on an Apple IIe.
+
+Password Rotation!  Woooo!  Who's with me?  No...nobody?  Why isn't anyone excited?  Are you sure you don't want to go hear about Terraform 0.12?  Ok, you're stuck with me!
 
 Let's be honest, nobody came to this talk because they like changing passwords. I'll give you an example...(Advance to Next slide)
 
@@ -95,7 +97,7 @@ Inventor of the Computer Password
 ]
 
 ???
-This dashing gentleman is Fernando Corbató. He is one of the pioneers of timesharing computer systems. He lead the team that developed the first Compatible Time Sharing System for mainframe computers. He also invented the modern computer password. 
+This dashing gentleman is Fernando Corbató. He is one of the pioneers of timesharing computer systems. He lead the team that developed the first Compatible Time Sharing System for mainframe computers. He also invented the modern computer password.
 
 You see, back in those days computers were giant hulking machines that filled entire rooms. These powerful machines were big and expensive to run. Users would write their programs on punch cards, and then submit the punch cards to operators to run. (Think about that next time you go to deploy your code...)
 
@@ -106,6 +108,8 @@ Fernando and his team invented time sharing to solve this problem. Multiple user
 "The key problem was that we were setting up multiple terminals which were to be used by multiple persons but with each person having his own private set of files," he told Wired. "Putting a password on for each individual user as a lock seemed like a very straightforward solution."
 
 Thus the password was born...
+
+And if Hollywood has taught us anything, it's that the handsome scientist's experiment is going to go horribly wrong by the end of the movie...
 
 ---
 name: Science-Gone-Wrong
@@ -119,6 +123,8 @@ Science Gone Wrong
 ]
 
 ???
+Ok, maybe things didn't turn out quite *that* badly. Dr. Corbato is still alive and healthy, and he didn't turn into a fly. But there problems with the password began almost immediately.
+
 Less than a year after the password was invented, the first instance of password theft occurred in 1962.
 
 You see, these machines were very expensive to run and you were sharing them with everyone else on the team. Each user was allocated only four hours per week of compute time for their projects. 
@@ -129,7 +135,20 @@ In order to cover his tracks he shared the password list with several other user
 
 And just like a sci-fi movie plot, the brilliant scientist's creation eventually came back to haunt him. "It's become kind of a nightmare," says the 87-year-old retired researcher. "I don't think anybody can possibly remember all the passwords."
 
-Fast forward the clock 50 years, which brings us to the modern day...
+Let's turn the clock forward a bit to the 1970s...
+
+---
+name: Miss-Piggy
+Meet Miss Piggy
+-------------------------
+.center[
+![:scale 80%](images/misspiggy.png)
+<br>
+<sub>Living Computer Museum PDP-11</sub>
+]
+
+???
+This morning, just for fun I wanted to log onto the oldest legacy machine I could find. The Living Computer Museum that I mentioned on the first slide has a bunch of legacy machines that you can get accounts on. This one is a PDP-11/70, first built in 1975. This particular machine is running Unix v7. Everybody's passwords on this machine are still stored in that same file, but we've made some improvements.
 
 ---
 name: Evolution-of-the-Computer-Password
@@ -198,9 +217,12 @@ class: center,middle
 ]
 
 ???
-Why does this happen? Because we like to torture our users with really weird complexity requirements for passwords. Humans can on average, reliably remember a group of 7 digits, six letters, and five words.  https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
+Why does this happen? Because we like to torture our users with really weird complexity requirements for passwords. Humans can on average, reliably remember a group of 7 digits, six letters, and five words. 
+
+https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
 
 Believe it or not there was a time when many of us could recite a dozen phone numbers by heart.
+
 Can anyone remember five phone numbers? Three? Do you know any phone numbers? Some people don't even remember own phone number anymore.
 
 Yet we've told our poor users they have to remember this string of 8 or 10 digits/symbols/letters.
@@ -656,9 +678,22 @@ Security Considerations
 * DDOS or failure of Vault cluster could lock you out of systems
 
 *Possible ways to mitigate risk*
-* Sentinel (Enterprise Only): Configure Vault token so it can only be used during a short time window (5 minutes). Example: 03:57:30 to 04:02:30
+* Configure Vault token so it can only be used during a short time window (5 minutes). Example: 03:57:30 to 04:02:30. (Enterprise)
+* Limit length of data that can be written into the k/v store. (Enterprise)
+* Use Vault in HA mode and use DR replication for emergencies. (Enterprise)
 * Monitor Vault audit logs for any unusual activity on systemcreds/linux and systemcreds/windows endpoints
-* Use Vault in HA mode and use DR replication for emergencies. (Enterprise Only)
+
+---
+name: Active-Directory-Rotation
+Active Directory Password Rotation
+-------------------------
+If you have system accounts in Active Directory, you can also rotate those passwords using Vault.
+
+* Uses "Lazy" rotation
+* Passwords must be past their TTL *and* be requested
+* Designed for high-load environments where many instances are accessing and sharing the password
+
+.center[https://www.vaultproject.io/docs/secrets/ad/index.html]
 
 ---
 name: Download-the-Code
@@ -667,6 +702,7 @@ Download the Code
 <br><br><br><br><br>
 .center[
 #https://git.io/fxKtU
+#https://scarolan.github.io/painless-password-rotation
 ]
 
 ---
