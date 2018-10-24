@@ -111,6 +111,8 @@ Thus the password was born...
 
 And if Hollywood has taught us anything, it's that the handsome scientist's experiment is going to go horribly wrong by the end of the movie...
 
+Source: https://www.wired.com/2012/01/computer-password/
+
 ---
 name: Science-Gone-Wrong
 class: center
@@ -183,7 +185,7 @@ class: center,middle
 # Mochi
 
 ???
-This is easy to remember, but unfortunately also easy to crack. I ran a password cracking tool against a hashed version of this and it took less than two minutes to break.
+This is easy to remember, but unfortunately also easy to crack. I ran a password cracking tool against a hashed version of this and it took less than two minutes to break, using an instance that costs around 7 cents an hour to run.
 
 ---
 name: Choosing-a-Secure-Password-Not-Complex
@@ -257,6 +259,8 @@ The Password Safe
 ???
 Nowadays we have to have a 'wallet' or 'password safe' just to keep track of the many passwords we use for various accounts and services. Many people store their passwords on their browser or in an app on their smartphone. So the situation on personal devices is more or less tolerable...but how can we deal with password rotation on servers and cloud instances? What if you have 300 machines to manage, each with its own local accounts?
 
+We've looked at the history of password security, let's take a short peek into the present and future:
+
 ---
 name: Dynamic-Credentials
 class: center
@@ -265,7 +269,9 @@ Self-Destructing Credentials
 ![:scale 90%](images/self-destruct.gif)
 
 ???
-What if you could instead hand out usernames and passwords that would automatically expire. Users and applications can simply check out new credentials when they need them, use them for a specific amount of time, and then the credentials automatically vanish when they expire?  Sounds great doesn't it?
+Here's one possible solution to the problem of password management in a modern infrastructure:
+
+What if you could hand out usernames and passwords that automatically expire. Users and applications can simply check out new credentials when they need them, use them for a specific amount of time, and then the credentials automatically vanish when they expire?  Sounds great doesn't it?
 
 ---
 name: Dynamic-Credentials-for-Cloud-and-DB
@@ -295,13 +301,15 @@ $ uptime
 leg·a·cy (adjective): _denoting software or hardware that has been superseded but is difficult to replace because of its wide use._
 
 ???
-Let's talk about legacy systems. Do any of you have a machine like this on your network? 
+Let's talk about legacy systems. Anyone have a machine like Miss Piggy on your network?
 
-Who here manages legacy systems for your organization? Please stand up. Let's give these people a hand. These folks are heroes for taking care of those ancient systems that nobody else wants to touch. Ok you can sit back down, that is your praise for the year.  Make it last. Isn't it true though? What a thankless job. Be nice to your sysadmins and ops people.
+Who here manages legacy systems for your organization? Please stand up. Let's give these people a hand. These folks are heroes for taking care of those ancient systems that nobody else wants to touch. Be nice to your sysadmins and ops people.
 
 What are we going to do about these legacy systems? Some of my customers have started giving them new names. A couple weeks ago an IT director introduced me to his "Classic" environment. But I think my favorite is the bank, with their "Heritage" collection of machines. Heritage systems. You can put that on your resume. Curator of Heritage Systems.
 
 If there's one thing we know about these legacy systems, it's that they are not going away any time soon. These dinosaurs have survived this long, and somebody's gotta care for them. The security team says the root and admin passwords on these boxes has to be rotated every 90 days. How are we going to tackle this challenge?
+
+We set out to design a system that would automate system password rotation and storage in a secure way. Here are the design requirements:
 
 ---
 name: Design-Requirements-1
@@ -310,6 +318,9 @@ Design Requirements
 .biglist[
 - No external software. Works with Bash or Powershell.
 ]
+
+???
+You don't need any special management tools other than the Bash or Powershell that already ships with your system.
 
 ---
 name: Design-Requirements-2
@@ -320,6 +331,9 @@ Design Requirements
 - Trusted source of entropy for password generation.
 ]
 
+???
+The first revision of this script used openssl or powershell to generate random strings. I didn't like this because 1. We are not sure we can trust every machine to get this right and 2. We might not have openssl or other random generator tools installed on our clients. Instead, we're going to use Vault itself to generate new passwords.
+
 ---
 name: Design-Requirements-3
 Design Requirements
@@ -329,6 +343,9 @@ Design Requirements
 - Trusted source of entropy for password generation.
 - Each machine responsible for its own password rotation.
 ]
+
+???
+We do not want to be in the business of micro-managing all these passwords on various machines. Each system should take care of itself.
 
 ---
 name: Design-Requirements-4
@@ -341,6 +358,9 @@ Design Requirements
 - Supports random secure passwords or passphrases.
 ]
 
+???
+We want to support either long strings of characters, or the more human friendly passphrase style passwords.
+
 ---
 name: Design-Requirements-5
 Design Requirements
@@ -352,6 +372,9 @@ Design Requirements
 - Supports random secure passwords or passphrases.
 - All passwords are encrypted in transit and at rest.
 ]
+
+???
+Everything must be encrypted both in transit and at rest.
 
 ---
 name: Design-Requirements-6
@@ -366,6 +389,9 @@ Design Requirements
 - Servers have write-only access to HashiCorp Vault.
 ]
 
+???
+Servers should be able to write, but not read their own passwords.  This essentially creates a one-way door, so that even if a system is compromised the attacker still can't read the passwords.
+
 ---
 name: Design-Requirements-7
 Design Requirements
@@ -379,6 +405,9 @@ Design Requirements
 - Servers have write-only access to HashiCorp Vault.
 - N number of previous password versions stored in Vault.
 ]
+
+???
+We want to have previous versions of the password just in case we need them.
 
 ---
 name: Design-Requirements-8
@@ -395,6 +424,9 @@ Design Requirements
 - Humans are granted read access to passwords by policy.
 ]
 
+???
+Humans should be able to get to these passwords by logging onto vault or using the API. Humans may not *write* to the password store, access is read only.
+
 ---
 name: Design-Requirements-9
 Design Requirements
@@ -410,6 +442,9 @@ Design Requirements
 - Humans are granted read access to passwords by policy.
 - Passwords are automatically rotated every X days.
 ]
+
+???
+And finally, the whole point of this presentation, is that passwords get rotated every 90 days. Let's go ahead and show you how to set it all up in your own environment:
 
 ---
 name: Setup-Vault
